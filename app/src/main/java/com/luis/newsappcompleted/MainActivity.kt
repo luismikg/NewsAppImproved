@@ -15,9 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.luis.newsappcompleted.presentation.onbording.OnBoardingScreen
+import com.luis.newsappcompleted.presentation.onbording.OnBoardingViewModel
 import com.luis.newsappcompleted.ui.theme.NewsAppCompletedTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +31,15 @@ class MainActivity : ComponentActivity() {
             NewsAppCompletedTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Box(modifier = Modifier.background(color = MaterialTheme.colorScheme.background)) {
-                        OnBoardingScreen(modifier = Modifier.padding(innerPadding))
+
+                        val viewModel: OnBoardingViewModel = hiltViewModel()
+                        OnBoardingScreen(
+                            modifier = Modifier.padding(innerPadding),
+                            event = viewModel::onEvent,
+                            /*event = { event ->
+                                viewModel.onEvent(event)
+                            }*/
+                        )
                     }
                 }
             }
